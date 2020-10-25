@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+if (!isset($argv[1])) {
+    return;
+}
+
+if (strpos($argv[1], 'tests') === 0) {
+    $testPath = $argv[1];
+    if (strpos($testPath, '/') !== false) {
+        $testPath .= '.php';
+    }
+    exec("vendor/bin/phpunit {$testPath}", $output);
+    echo implode("\n", $output), "\n";
+    return;
+} elseif (substr($argv[1], -4) === 'Test') {
+    $testName = $argv[1] . '.php';
+    exec("vendor/bin/phpunit tests/{$testName}", $output);
+    echo implode("\n", $output), "\n";
+    return;
+}

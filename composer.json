@@ -1,0 +1,29 @@
+{
+  "name": "rkwadriga/php-simpledi",
+  "type": "library",
+  "description": "Simple php DI container",
+  "version": "1.0.0",
+  "homepage": "https://github.com/rkwadriga/php-simpledi",
+  "license": "GPL",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "rkwadriga",
+      "email": "remkwadriga2013@gmail.com",
+      "role": "Owner"
+    }
+  ],
+  "require": {
+    "php": ">=7.4.0",
+    "phpunit/phpunit": "^9.3.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "rkwadiga\\simpledi\\": "src",
+      "rkwadriga\\simpledi\\tests\\": "tests"
+    }
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^5.2@beta"
+  }
+}
