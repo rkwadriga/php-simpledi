@@ -5,7 +5,7 @@ namespace rkwadriga\simpledi\tests\mock;
 /**
  * Class Transient_3
  * @package rkwadriga\simpledi\tests\mock
- * @Transient(privateString="Private string value", privateInt=123, privateArray=[1, 2, 3], publicString="Public string string value", publicFloat=3.14)
+ * @Transient(privateString="Private string value", privateInt=123, privateArray={"param1": 1, "param2": 2, "param3": 3}, publicString="Public string string value", publicFloat=3.14)
  */
 class Transient_3
 {
