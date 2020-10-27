@@ -83,7 +83,7 @@ class PhpDocReader
         return $res;
     }
 
-    private function clearStringFromFoundParam(&$str, $found) : void
+    private function clearStringFromFoundParam(string &$str, string $found) : void
     {
         $str = str_replace($found, '', $str);
         if (in_array(substr($str, 0, 1), [',', ';'])) {
