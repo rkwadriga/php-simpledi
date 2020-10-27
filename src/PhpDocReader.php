@@ -10,11 +10,6 @@ class PhpDocReader
 
     public function read(string $doc) : array
     {
-        return $this->convertToArray($doc);
-    }
-
-    private function convertToArray(string $doc) : array
-    {
         $res = [];
         $docArr = array_slice(explode("\n", $doc), 1, -1);
         foreach ($docArr as $str) {
