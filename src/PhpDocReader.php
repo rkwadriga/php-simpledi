@@ -21,7 +21,7 @@ class PhpDocReader
             foreach ($this->skippedWords as $word) {
                 if (strpos($str, "@{$word}") !== false) {
                     $continue = true;
-                    continue;
+                    break;
                 }
             }
             if ($continue) {
