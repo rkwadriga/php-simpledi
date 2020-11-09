@@ -2,6 +2,9 @@
 
 namespace rkwadriga\simpledi\tests\mock;
 
+use Closure;
+use ReflectionClass;
+
 trait ConfigurationTrait
 {
     protected string $notExistedClass = 'rkwadriga\simpledi\tests\mock\InvalidClass';
@@ -35,5 +38,13 @@ trait ConfigurationTrait
     public function getPublicProperties()
     {
         return array_intersect_key($this->params, $this->publicProperties);
+    }
+
+    public function getClosure(string $class) : Closure
+    {
+        return function () use ($class) {
+            $reflect = new ReflectionClass($class);
+            return $reflect->newInstanceArgs($this->params);
+        };
     }
 }
