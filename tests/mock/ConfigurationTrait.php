@@ -47,4 +47,32 @@ trait ConfigurationTrait
             return $reflect->newInstanceArgs($this->params);
         };
     }
+
+    public function getRandomParams(?string $behavior = null) : array
+    {
+        $randomParams = $this->params;
+        foreach ($randomParams as $name => $value) {
+            if (is_string($value)) {
+                $randomParams[$name] = $value . '_' . rand(1000, 9999);
+            } elseif (is_numeric($value)) {
+                $randomParams[$name] = $value + rand(100, 999);
+            } elseif (is_array($value)) {
+                $randomParams[$name] = ['random_string' => 'Random_string_' . rand(1000, 9999), rand(100, 999)];
+            }
+        }
+        return $behavior !== null ? array_merge(['behavior' => $behavior], $randomParams) : $randomParams;
+    }
+
+    public function getRandomPrivateAndPublicParams() : array
+    {
+        $privateParams = $publicParams = [];
+        foreach ($this->getRandomParams() as $name => $value) {
+            if (strpos($name, 'private') === 0) {
+                $privateParams[$name] = $value;
+            } else {
+                $publicParams[$name] = $value;
+            }
+        }
+        return [$privateParams, $publicParams];
+    }
 }

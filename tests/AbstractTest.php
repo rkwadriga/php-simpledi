@@ -4,6 +4,7 @@ namespace rkwadriga\simpledi\tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use ReflectionProperty;
 use rkwadriga\simpledi\tests\mock\ConfigurationTrait;
 
 abstract class AbstractTest extends TestCase
@@ -40,5 +41,21 @@ abstract class AbstractTest extends TestCase
         foreach ($publicProperties as $name => $value) {
             $this->assertEquals($value, $instance->$name);
         }
+    }
+
+    protected function createObject(string $class, array $params = []) : object
+    {
+        $params = array_merge($this->params, $params);
+        $reflection = new ReflectionClass($class);
+        $instance = $reflection->newInstanceArgs($params);
+        foreach ($params as $name => $value) {
+            $setter = 'set' . ucfirst($name);
+            if (method_exists($instance, $setter)) {
+                call_user_func([$instance, $setter], $value);
+            } elseif (property_exists($instance, $name) && (new ReflectionProperty($class, $name))->isPublic()) {
+                $instance->$name = $value;
+            }
+        }
+        return $instance;
     }
 }

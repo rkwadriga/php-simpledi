@@ -10,6 +10,7 @@ use rkwadiga\simpledi\exception\ReflectionException;
 
 class Reflection
 {
+    private string $class;
     private ReflectionClass $reflection;
     private PhpDocReader $phpDocReader;
     private  ?array $configuration;
@@ -21,6 +22,7 @@ class Reflection
     public function __construct(string $class)
     {
         $this->reflection = $this->getReflection($class);
+        $this->class = $class;
         $this->phpDocReader = new PhpDocReader();
         $this->configuration = null;
         $this->requiredConstructorParams = null;
@@ -113,6 +115,11 @@ class Reflection
     public function createInstance(array $constructorParams) : object
     {
         return $this->reflection->newInstanceArgs($constructorParams);
+    }
+
+    public function getClass() : string
+    {
+        return $this->class;
     }
 
     private function getReflection(string $forClass) : ReflectionClass

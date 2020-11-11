@@ -22,6 +22,7 @@ class ReflectionTest extends AbstractTest
         $classReflection1 = $this->getPrivateProperty($reflection, 'reflection');
         $this->assertInstanceOf(ReflectionClass::class, $classReflection1);
         $this->assertEquals(Scoped_3::class, $classReflection1->name);
+        $this->assertEquals(Scoped_3::class, $reflection->getClass());
 
         $classReflection2 = $this->callPrivateMethod($reflection, 'getReflection', [Scoped_3::class]);
         $this->assertEquals($classReflection1, $classReflection2);
@@ -68,6 +69,12 @@ class ReflectionTest extends AbstractTest
         $reflection = new Reflection(Scoped_3::class);
         $instance = $reflection->createInstance($this->params);
         $this->checkInstance($instance, Scoped_3::class, null, []);
+    }
+
+    public function testGetClass()
+    {
+        $reflection = new Reflection(Scoped_3::class);
+        $this->assertEquals(Scoped_3::class, $reflection->getClass());
     }
 
     public function testInvalidClassException()
