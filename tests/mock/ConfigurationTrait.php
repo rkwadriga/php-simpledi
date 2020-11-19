@@ -4,6 +4,8 @@ namespace rkwadriga\simpledi\tests\mock;
 
 use Closure;
 use ReflectionClass;
+use ReflectionProperty;
+use rkwadiga\simpledi\Container;
 
 trait ConfigurationTrait
 {
@@ -43,8 +45,7 @@ trait ConfigurationTrait
     public function getClosure(string $class) : Closure
     {
         return function () use ($class) {
-            $reflect = new ReflectionClass($class);
-            return $reflect->newInstanceArgs($this->params);
+            return $this->createObject($class);
         };
     }
 
@@ -74,5 +75,35 @@ trait ConfigurationTrait
             }
         }
         return [$privateParams, $publicParams];
+    }
+
+    public function getContainerConfiguration() : array
+    {
+        return [
+            'string_scalar' => 'String value',
+            'int_scalar' => 123,
+            'float_scalar' => 3.14,
+            'array_scalar' => ['param1' => 1, 'param2' => 2, 'param3' => 3],
+            'object_scalar' => $this->createObject(Singleton_3::class),
+            'singleton_item' => Singleton_3::class,
+            'transient_item' => array_merge(['class' => Transient_3::class], $this->getRandomParams(Container::TRANSIENT)),
+            Scoped_3::class => $this->getClosure(Scoped_3::class),
+        ];
+    }
+
+    public function createObject(string $class, array $params = []) : object
+    {
+        $params = array_merge($this->params, $params);
+        $reflection = new ReflectionClass($class);
+        $instance = $reflection->newInstanceArgs($params);
+        foreach ($params as $name => $value) {
+            $setter = 'set' . ucfirst($name);
+            if (method_exists($instance, $setter)) {
+                call_user_func([$instance, $setter], $value);
+            } elseif (property_exists($instance, $name) && (new ReflectionProperty($class, $name))->isPublic()) {
+                $instance->$name = $value;
+            }
+        }
+        return $instance;
     }
 }
