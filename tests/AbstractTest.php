@@ -4,6 +4,8 @@ namespace rkwadriga\simpledi\tests;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use rkwadiga\simpledi\behaviors\AbstractBehavior;
+use rkwadiga\simpledi\ContainerItem;
 use rkwadriga\simpledi\tests\mock\ConfigurationTrait;
 
 abstract class AbstractTest extends TestCase
@@ -40,5 +42,13 @@ abstract class AbstractTest extends TestCase
         foreach ($publicProperties as $name => $value) {
             $this->assertEquals($value, $instance->$name);
         }
+    }
+
+    protected function checkBehaviorValue(AbstractBehavior $behavior, string $id, $value = null)
+    {
+        if ($value === null) {
+            $value = $this->createObject($id);
+        }
+        $this->assertEquals($value, $behavior->getItemValue(new ContainerItem($id, $value)));
     }
 }
